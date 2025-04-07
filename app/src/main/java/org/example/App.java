@@ -3,12 +3,60 @@
  */
 package org.example;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import model.Book;
+import model.Library;
+import model.Reader;
+import util.LibraryIO;
 
+import java.io.IOException;
+import java.util.List;
+
+public class App {
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        Library library = new Library();
+
+        // Додавання книг
+        Book book1 = new Book("Гаррі Поттер", "Джоан Роулінг");
+        Book book2 = new Book("1984", "Джордж Орвелл");
+        Book book3 = new Book("Місто", "Люко Дашвар");
+
+        library.addBook(book1);
+        library.addBook(book2);
+        library.addBook(book3);
+
+        // Додавання читача
+        Reader reader = new Reader("Настя");
+        library.addReader(reader);
+
+        // Видача книги
+        try {
+            library.borrowBook(book1);
+            System.out.println("Книгу '" + book1.getTitle() + "' видано.");
+        } catch (IllegalStateException e) {
+            System.out.println("Не вдалося видати книгу: " + e.getMessage());
+        }
+
+        // Повернення книги
+        library.returnBook(book1);
+        System.out.println("Книгу '" + book1.getTitle() + "' повернуто.");
+
+        // Експорт книг у файл
+        try {
+            LibraryIO.exportBooks(library.getBooks(), "books.json");
+            System.out.println("Книги експортовано у файл books.json");
+        } catch (IOException e) {
+            System.out.println("Помилка під час експорту: " + e.getMessage());
+        }
+
+        // Імпорт книг з файлу
+        try {
+            List<Book> importedBooks = LibraryIO.importBooks("books.json");
+            System.out.println("\nІмпортовані книги:");
+            for (Book book : importedBooks) {
+                System.out.println("- " + book.getTitle() + " (" + book.getAuthor() + ")");
+            }
+        } catch (IOException e) {
+            System.out.println("Помилка під час імпорту: " + e.getMessage());
+        }
     }
 }
