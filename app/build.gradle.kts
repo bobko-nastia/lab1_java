@@ -17,19 +17,17 @@ repositories {
 }
 
 dependencies {
-    // This dependency is used by the application.
+    // Gson для роботи з JSON
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // Додаємо JUnit 5 для тестування
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 }
 
-testing {
-    suites {
-        // Configure the built-in test suite
-        val test by getting(JvmTestSuite::class) {
-            // Use JUnit4 test framework
-            useJUnit("4.13.2")
-        }
-    }
+tasks.test {
+    useJUnitPlatform() // Увімкнення JUnit 5
 }
+
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
